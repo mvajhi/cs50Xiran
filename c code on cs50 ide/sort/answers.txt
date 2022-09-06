@@ -1,0 +1,29 @@
+sort1 uses: bubble sort
+
+How do you know?: Ω<<Ο
+
+sort2 uses: merge sort
+
+How do you know?: faster than other
+
+sort3 uses: selection sort
+
+How do you know?: have Θ
+
+
+
+1/
+random 111  462 16000
+revers 55   350 12760
+sorted 16    8  5310
+
+
+2/
+random 10   20  5675
+revers 10   100 6474
+sorted 10   50  3600
+
+3/
+random 54   186 9231
+revers 25   250 9500
+sorted 33   200 8800

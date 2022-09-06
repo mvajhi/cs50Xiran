@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <title>Trivia!</title>
+    <script>
+        function checkone(elmt) {
+            if (elmt.innerHTML == "mahdi") {
+                elmt.style.backgroundColor = "green";
+                document.getElementById("result1").innerHTML = "Correct!";
+            }
+            else {
+                elmt.style.backgroundColor = "red";
+                document.getElementById("result1").innerHTML = "Incorrect";
+            }
+        }
+        
+        function checktwo() {
+            if (document.getElementById("answer").value == "1401")
+            {
+                document.getElementById("answer").style.backgroundColor = "green";
+                document.getElementById("result2").innerHTML = "Correct!";
+            }
+            else {
+                document.getElementById("answer").style.backgroundColor = "red";
+                document.getElementById("result2").innerHTML = "Incorrect";
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="header">
+        <h1>Trivia!</h1>
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <h2>Part 1: Multiple Choice </h2>
+            <hr>
+            <h3>what is my name?</h3>
+            <button id="button" onclick="checkone(this); return false;" name="correct">mahdi</button>
+            <button id="button" onclick="checkone(this); return false;">ahmad</button>
+            <button id="button" onclick="checkone(this); return false;">mohamad</button>
+            <button id="button" onclick="checkone(this); return false;">reza</button>
+
+            <h3 id="result1"></h3>
+
+        </div>
+
+        <div class="section">
+            <h2>Part 2: Free Response</h2>
+            <hr>
+            <h3>this year?</h3>
+            <input id="answer" placeholder="input">
+            <button id="button" onclick="checktwo(); return false;">check</button>
+
+            <h3 id="result2"></h3>
+        </div>
+    </div>
+</body>
+
+</html>

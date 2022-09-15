@@ -1,12 +1,15 @@
+from operator import iconcat
 import os
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from helpers import apology, login_required, lookup, usd
+
+from icecream import ic
 
 # Configure application
 app = Flask(__name__)
@@ -112,7 +115,24 @@ def logout():
 @login_required
 def quote():
     """Get stock quote."""
-    return apology("TODO")
+    if request.method == "POST":
+        quote = request.form.get("symbole")
+        if quote:
+            symbole = lookup(quote)
+            if symbole == None:
+                return apology("Not Found")
+            else:
+                name = symbole["name"]
+                price = symbole["price"]
+                symbole_val = symbole["symbol"]
+
+                return render_template("quoted.html", name=name, price=price, symbole_val=symbole_val)
+
+        else:
+            return apology("No input found")
+
+    else:
+        return render_template("quote.html")
 
 
 @app.route("/register", methods=["GET", "POST"])

@@ -70,7 +70,7 @@ def buy():
         db.execute("UPDATE users SET cash = ? WHERE id = ?", (user_cash - total_price), session["user_id"])
         db.execute("INSERT INTO finance (users_id, symbole, amount, price, total_price) VALUES (?, ?, ?, ?, ?)", session["user_id"], symbole, amount, price, total_price)
 
-        return redirect ("/index")
+        return redirect ("/")
 
     else:
         return render_template ("buy.html")

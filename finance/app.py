@@ -47,7 +47,7 @@ def after_request(response):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return apology("TODO")
+    return render_template ("index.html")
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -56,7 +56,7 @@ def buy():
     """Buy shares of stock"""
     if request.method == "POST":
         symbole = request.form.get("symbole")
-        amount = int(request.form.get("amount"))F
+        amount = int(request.form.get("amount"))
         if amount <= 0:
             return apology("Invalid amount")
 

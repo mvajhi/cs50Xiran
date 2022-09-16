@@ -55,22 +55,21 @@ def buy():
     """Buy shares of stock"""
     if request.method == "POST":
         symbole = request.form.get("symbole")
-        amount = request.form.get("amount")
+        amount = int(request.form.get("amount"))
 
         info_symbole = lookup(symbole)
         if info_symbole == None:
             return apology("symbole not found")
         
-        price = info_symbole["price"]
+        price = float(info_symbole["price"])
         total_price = price * amount
-        user_cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])
+        user_cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
         if user_cash < total_price:
             return apology("You don't have enough money")
         
         db.execute("UPDATE users SET cash = ? WHERE id = ?", (user_cash - total_price), session["user_id"])
         db.execute("INSERT INTO finance (users_id, symbole, amount, price, total_price) VALUES (?, ?, ?, ?, ?)", session["user_id"], symbole, amount, price, total_price)
 
-        ic()
         return redirect ("/index")
 
     else:

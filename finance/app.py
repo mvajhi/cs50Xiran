@@ -49,14 +49,16 @@ def after_request(response):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
+    cash = db.execute("SELECT cash FROM users WHERE id = ?",
+                      session["user_id"])[0]["cash"]
     ic(cash)
 
-    finances = (db.execute("SELECT * FROM finance WHERE users_id = ?", session["user_id"]), session["user_id"])[0]
-    
+    finances = (db.execute("SELECT * FROM finance WHERE users_id = ?",
+                session["user_id"]), session["user_id"])[0]
+
     finances_with_value = []
     investments = float(0)
-    
+
     for finance in finances:
         if not finance["amount"] == 0:
             price = lookup(finance["symbole"])["price"]
@@ -69,10 +71,10 @@ def index():
             finance.pop("users_id")
 
             finances_with_value.append(finance)
-    
+
     total_finance = cash + investments
     ic(finances_with_value)
-    return render_template("index.html", finances = finances_with_value, investments = round(investments, 2), cash = round(cash, 2), total_finance = round(total_finance, 2))
+    return render_template("index.html", finances=finances_with_value, investments=round(investments, 2), cash=round(cash, 2), total_finance=round(total_finance, 2))
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -108,7 +110,8 @@ def buy():
             db.execute("INSERT INTO finance (users_id, symbole, amount) VALUES (?, ?, ?)",
                        session["user_id"], symbole, amount)
         else:
-            db.execute("UPDATE finance SET amount = amount + ? WHERE symbole = ?", amount, symbole)
+            db.execute(
+                "UPDATE finance SET amount = amount + ? WHERE symbole = ?", amount, symbole)
 
         return redirect("/")
 
@@ -120,8 +123,9 @@ def buy():
 @login_required
 def history():
     """Show history of transactions"""
-    history = db.execute("SELECT symbole, amount, price, total_price, type, date FROM history WHERE users_id = ?", session["user_id"])
-    
+    history = db.execute(
+        "SELECT symbole, amount, price, total_price, type, date FROM history WHERE users_id = ?", session["user_id"])
+
     i = int(0)
     history_with_counter = []
     for history_part in history:
@@ -129,7 +133,7 @@ def history():
         history_part["counter"] = i
         history_with_counter.append(history_part)
 
-    return render_template("history.html", history = history_with_counter)
+    return render_template("history.html", history=history_with_counter)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -252,17 +256,17 @@ def sell():
             if user_amount < amount:
                 return apology("You don't have enough stock")
         except:
-                return apology("You don't have enough stock")
+            return apology("You don't have enough stock")
 
         db.execute("UPDATE users SET cash = cash + ? WHERE id = ?",
                    total_price, session["user_id"])
         db.execute("INSERT INTO history (users_id, symbole, amount, price, total_price, type, date) VALUES (?, ?, ?, ?, ?, ?, ?)",
                    session["user_id"], symbole, amount, price, total_price, "sell", datetime.now())
 
-        db.execute("UPDATE finance SET amount = amount - ? WHERE symbole = ?", amount, symbole)
+        db.execute(
+            "UPDATE finance SET amount = amount - ? WHERE symbole = ?", amount, symbole)
 
         return redirect("/")
 
     else:
         return render_template("sell.html")
-

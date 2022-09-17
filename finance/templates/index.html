@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Index
+{% endblock %}
+
+{% block main %}
+<h1>General account status</h1>
+<br>
+<h3>Available cash: {{ cash }}$</h3>
+<h4>Investments: {{ investments }}$</h4>
+<h4>Total finance: {{ total_finance }}$</h4>
+
+<table class="container table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">symbole</th>
+            <th scope="col">amount</th>
+            <th scope="col">value</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for finance in finances %}
+        <tr scope="row">
+            <th>{{ finance["symbole"] }}</th>
+            <th>{{ finance["amount"] }}</th>
+            <th>{{ finance["value"] }}$</th>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

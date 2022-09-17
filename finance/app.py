@@ -58,16 +58,17 @@ def index():
     investments = float(0)
     
     for finance in finances:
-        price = lookup(finance["symbole"])["price"]
-        total_price = price * finance["amount"]
-
-        investments += total_price
-
-        finance["value"] = round(total_price, 2)
-        finance.pop("id")
-        finance.pop("users_id")
-        
-        finances_with_value.append(finance)
+        if not finance["amount"] == 0:
+            price = lookup(finance["symbole"])["price"]
+            total_price = price * finance["amount"]
+    
+            investments += total_price
+    
+            finance["value"] = round(total_price, 2)
+            finance.pop("id")
+            finance.pop("users_id")
+            
+            finances_with_value.append(finance)
     
     total_finance = cash + investments
     ic(finances_with_value)

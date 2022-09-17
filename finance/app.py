@@ -61,13 +61,13 @@ def index():
         if not finance["amount"] == 0:
             price = lookup(finance["symbole"])["price"]
             total_price = price * finance["amount"]
-    
+
             investments += total_price
-    
+
             finance["value"] = round(total_price, 2)
             finance.pop("id")
             finance.pop("users_id")
-            
+
             finances_with_value.append(finance)
     
     total_finance = cash + investments
@@ -117,7 +117,16 @@ def buy():
 @login_required
 def history():
     """Show history of transactions"""
-    return apology("TODO")
+    history = db.execute("SELECT symbole, amount, price, total_price, type, date FROM history WHERE users_id = ?", session["user_id"])
+    
+    i = int(0)
+    history_with_counter = []
+    for history_part in history:
+        i += 1
+        history_part["counter"] = i
+        history_with_counter.append(history_part)
+
+    return render_template("history.html", history = history_with_counter)
 
 
 @app.route("/login", methods=["GET", "POST"])

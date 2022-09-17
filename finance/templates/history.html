@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block title %}
+History
+{% endblock %}
+
+{% block main %}
+<h1>History</h1>
+
+<table class="container table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">symbole</th>
+            <th scope="col">type</th>
+            <th scope="col">amount</th>
+            <th scope="col">price</th>
+            <th scope="col">total price</th>
+            <th scope="col">date and time</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for history_part in history %}
+            {% if history_part["type"] == "sell" %}
+                <tr style="background-color:#d9edf7">
+                    <th>{{ history_part["counter"] }}</th>
+                    <th>{{ history_part["symbole"] }}</th>
+                    <th>{{ history_part["type"] }}</th>
+                    <th>{{ history_part["amount"] }}</th>
+                    <th>{{ history_part["price"] }}$</th>
+                    <th>{{ history_part["total_price"] }}$</th>
+                    <th>{{ history_part["date"] }}</th>
+                </tr>
+            {% endif %}
+            {% if history_part["type"] == "buy" %}
+                <tr style="background-color:#fcf8e3">
+                    <th>{{ history_part["counter"] }}</th>
+                    <th>{{ history_part["symbole"] }}</th>
+                    <th>{{ history_part["type"] }}</th>
+                    <th>{{ history_part["amount"] }}</th>
+                    <th>{{ history_part["price"] }}$</th>
+                    <th>{{ history_part["total_price"] }}$</th>
+                    <th>{{ history_part["date"] }}</th>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

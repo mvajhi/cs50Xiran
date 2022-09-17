@@ -64,14 +64,14 @@ def index():
 
             investments += total_price
 
-            finance["value"] = round(total_price, 2)
+            finance["value"] = usd(total_price)
             finance.pop("id")
             finance.pop("users_id")
 
             finances_with_value.append(finance)
 
     total_finance = cash + investments
-    return render_template("index.html", finances=finances_with_value, investments=round(investments, 2), cash=round(cash, 2), total_finance=round(total_finance, 2))
+    return render_template("index.html", finances=finances_with_value, investments=usd(investments), cash=usd(cash), total_finance=usd(total_finance))
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -186,14 +186,14 @@ def logout():
 def quote():
     """Get stock quote."""
     if request.method == "POST":
-        quote = request.form.get("symbole")
+        quote = request.form.get("symbole").upper()
         if quote:
             symbole = lookup(quote)
             if symbole == None:
                 return apology("Not Found")
             else:
                 name = symbole["name"]
-                price = symbole["price"]
+                price = usd(symbole["price"])
                 symbole_val = symbole["symbol"]
 
                 return render_template("quoted.html", name=name, price=price, symbole_val=symbole_val)

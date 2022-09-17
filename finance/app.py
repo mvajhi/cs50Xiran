@@ -77,7 +77,7 @@ def index():
 def buy():
     """Buy shares of stock"""
     if request.method == "POST":
-        symbole = request.form.get("symbole")
+        symbole = request.form.get("symbole").upper()
         amount = int(request.form.get("amount"))
         if amount <= 0:
             return apology("Invalid amount")
@@ -215,4 +215,36 @@ def register():
 @login_required
 def sell():
     """Sell shares of stock"""
-    return apology("TODO")
+    if request.method == "POST":
+        symbole = request.form.get("symbole").upper()
+        amount = int(request.form.get("amount"))
+        if amount <= 0:
+            return apology("Invalid amount")
+
+        info_symbole = lookup(symbole)
+        if info_symbole == None:
+            return apology("symbole not found")
+
+        price = float(info_symbole["price"])
+        total_price = price * amount
+        user_amount = db.execute(
+            "SELECT amount FROM finance WHERE symbole = ?", symbole)[0]["amount"]
+
+        try:
+            if user_amount < amount:
+                return apology("You don't have enough stock")
+        except:
+                return apology("You don't have enough stock")
+
+        db.execute("UPDATE users SET cash = cash + ? WHERE id = ?",
+                   total_price, session["user_id"])
+        db.execute("INSERT INTO history (users_id, symbole, amount, price, total_price) VALUES (?, ?, ?, ?, ?)",
+                   session["user_id"], symbole, -amount, -price, -total_price)
+
+        db.execute("UPDATE finance SET amount = amount + ? WHERE symbole = ?", -amount, symbole)
+
+        return redirect("/")
+
+    else:
+        return render_template("sell.html")
+

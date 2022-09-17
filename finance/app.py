@@ -81,8 +81,11 @@ def buy():
     """Buy shares of stock"""
     if request.method == "POST":
         symbole = request.form.get("symbole").upper()
-        amount = int(request.form.get("amount"))
-        if amount <= 0:
+        try:
+            amount = int(request.form.get("amount"))
+        except:
+            return apology("Invalid amount")
+        if amount <= 0 or not isinstance(amount, int):
             return apology("Invalid amount")
 
         info_symbole = lookup(symbole)
@@ -229,8 +232,11 @@ def sell():
     """Sell shares of stock"""
     if request.method == "POST":
         symbole = request.form.get("symbole").upper()
-        amount = int(request.form.get("amount"))
-        if amount <= 0:
+        try:
+            amount = int(request.form.get("amount"))
+        except:
+            return apology("Invalid amount")
+        if amount <= 0 or not isinstance(amount, int):
             return apology("Invalid amount")
 
         info_symbole = lookup(symbole)

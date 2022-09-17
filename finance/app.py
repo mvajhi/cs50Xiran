@@ -81,7 +81,7 @@ def buy():
     if request.method == "POST":
         symbole = request.form.get("symbol").upper()
         try:
-            amount = int(request.form.get("amount"))
+            amount = int(request.form.get("shares"))
         except:
             return apology("Invalid amount")
         if amount <= 0 or not isinstance(amount, int):
@@ -238,7 +238,7 @@ def sell():
     if request.method == "POST":
         symbole = request.form.get("symbol").upper()
         try:
-            amount = int(request.form.get("amount"))
+            amount = int(request.form.get("shares"))
         except:
             return apology("Invalid amount")
         if amount <= 0 or not isinstance(amount, int):

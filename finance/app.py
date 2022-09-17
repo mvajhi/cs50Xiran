@@ -12,7 +12,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from helpers import apology, login_required, lookup, usd
 
-from icecream import ic
 
 # Configure application
 app = Flask(__name__)
@@ -51,7 +50,6 @@ def index():
     """Show portfolio of stocks"""
     cash = db.execute("SELECT cash FROM users WHERE id = ?",
                       session["user_id"])[0]["cash"]
-    ic(cash)
 
     finances = (db.execute("SELECT * FROM finance WHERE users_id = ?",
                 session["user_id"]), session["user_id"])[0]
@@ -73,7 +71,6 @@ def index():
             finances_with_value.append(finance)
 
     total_finance = cash + investments
-    ic(finances_with_value)
     return render_template("index.html", finances=finances_with_value, investments=round(investments, 2), cash=round(cash, 2), total_finance=round(total_finance, 2))
 
 

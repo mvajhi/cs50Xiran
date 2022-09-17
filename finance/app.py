@@ -47,10 +47,29 @@ def after_request(response):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    finance = (db.execute("SELECT * FROM finance WHERE users_id = ?", session["user_id"]), session["user_id"])[0]
-    ic(finance[0])
-    ic (len(finance))
-    return render_template("index.html")
+    cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
+    ic(cash)
+
+    finances = (db.execute("SELECT * FROM finance WHERE users_id = ?", session["user_id"]), session["user_id"])[0]
+    
+    finances_with_value = []
+    investments = float(0)
+    
+    for finance in finances:
+        price = lookup(finance["symbole"])["price"]
+        total_price = price * finance["amount"]
+
+        investments += total_price
+
+        finance["value"] = total_price
+        finance.pop("id")
+        finance.pop("users_id")
+        
+        finances_with_value.append(finance)
+    
+    total_finance = cash + investments
+    ic(finances_with_value)
+    return render_template("index.html", finances = finances_with_value, investments = investments, cash = cash, total_finance = total_finance)
 
 
 @app.route("/buy", methods=["GET", "POST"])

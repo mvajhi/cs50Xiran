@@ -1,6 +1,8 @@
+from datetime import datetime
 from operator import iconcat
 import os
 import re
+import string
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, jsonify
@@ -95,8 +97,8 @@ def buy():
 
         db.execute("UPDATE users SET cash = ? WHERE id = ?",
                    (user_cash - total_price), session["user_id"])
-        db.execute("INSERT INTO history (users_id, symbole, amount, price, total_price) VALUES (?, ?, ?, ?, ?)",
-                   session["user_id"], symbole, amount, price, total_price)
+        db.execute("INSERT INTO history (users_id, symbole, amount, price, total_price, type, date) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                   session["user_id"], symbole, amount, price, total_price, "buy", datetime.now())
 
         if db.execute("SELECT * FROM finance WHERE symbole = ?", symbole) == []:
             db.execute("INSERT INTO finance (users_id, symbole, amount) VALUES (?, ?, ?)",
@@ -238,10 +240,10 @@ def sell():
 
         db.execute("UPDATE users SET cash = cash + ? WHERE id = ?",
                    total_price, session["user_id"])
-        db.execute("INSERT INTO history (users_id, symbole, amount, price, total_price) VALUES (?, ?, ?, ?, ?)",
-                   session["user_id"], symbole, -amount, -price, -total_price)
+        db.execute("INSERT INTO history (users_id, symbole, amount, price, total_price, type, date) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                   session["user_id"], symbole, amount, price, total_price, "sell", datetime.now())
 
-        db.execute("UPDATE finance SET amount = amount + ? WHERE symbole = ?", -amount, symbole)
+        db.execute("UPDATE finance SET amount = amount - ? WHERE symbole = ?", amount, symbole)
 
         return redirect("/")
 

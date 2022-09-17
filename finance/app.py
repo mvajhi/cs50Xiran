@@ -270,4 +270,9 @@ def sell():
         return redirect("/")
 
     else:
-        return render_template("sell.html")
+        symboles = db.execute("SELECT symbole FROM finance WHERE users_id = ?", session["user_id"])
+        symboles_val = []
+        for symbole in symboles:
+            symbole_val = symbole["symbole"]
+            symboles_val.append(symbole_val)
+        return render_template("sell.html", symboles = symboles_val)

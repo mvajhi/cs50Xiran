@@ -186,7 +186,7 @@ def logout():
 def quote():
     """Get stock quote."""
     if request.method == "POST":
-        quote = request.form.get("symbole").upper()
+        quote = request.form.get("symbole")
         if quote:
             symbole = lookup(quote)
             if symbole == None:

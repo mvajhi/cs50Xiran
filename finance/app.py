@@ -79,7 +79,7 @@ def index():
 def buy():
     """Buy shares of stock"""
     if request.method == "POST":
-        symbole = request.form.get("symbole").upper()
+        symbole = request.form.get("symbol").upper()
         try:
             amount = int(request.form.get("amount"))
         except:
@@ -186,7 +186,11 @@ def logout():
 def quote():
     """Get stock quote."""
     if request.method == "POST":
-        quote = request.form.get("symbole")
+        try:
+            quote = request.form.get("symbol").upper()
+        except:
+            return apology("invalid input")
+
         if quote:
             symbole = lookup(quote)
             if symbole == None:
@@ -232,7 +236,7 @@ def register():
 def sell():
     """Sell shares of stock"""
     if request.method == "POST":
-        symbole = request.form.get("symbole").upper()
+        symbole = request.form.get("symbol").upper()
         try:
             amount = int(request.form.get("amount"))
         except:

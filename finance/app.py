@@ -215,7 +215,7 @@ def register():
         confirmation = request.form.get("confirmation")
 
         # check input and save them
-        if not username == "" and not password == "" and password == confirmation:
+        if not username == "" and not password == "" and password == confirmation and db.execute("SELECT * FROM users WHERE username = ?", username) == []:
             hashval = generate_password_hash(password)
             db.execute(
                 "INSERT INTO users (username, hash) VALUES(?, ?)", username, hashval)

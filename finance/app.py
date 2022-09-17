@@ -61,7 +61,7 @@ def index():
 
         investments += total_price
 
-        finance["value"] = total_price
+        finance["value"] = round(total_price, 2)
         finance.pop("id")
         finance.pop("users_id")
         
@@ -69,7 +69,7 @@ def index():
     
     total_finance = cash + investments
     ic(finances_with_value)
-    return render_template("index.html", finances = finances_with_value, investments = investments, cash = cash, total_finance = total_finance)
+    return render_template("index.html", finances = finances_with_value, investments = round(investments, 2), cash = round(cash, 2), total_finance = round(total_finance, 2))
 
 
 @app.route("/buy", methods=["GET", "POST"])
